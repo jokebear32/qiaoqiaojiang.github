@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qiaoqiao Jiang — Personal Site</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Merriweather', 'Garamond', 'Georgia', 'serif'],
+                        sans: ['Inter', 'Roboto', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        sidebar: '#1a2639',
+                        sidebarHover: '#243447',
+                        cream: '#fcfbfa',
+                        gold: '#c5a059',
+                        goldLight: '#d4b56c',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ---------- smooth scroll & base ---------- */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', 'Roboto', system-ui, sans-serif;
+        }
+
+        /* ---------- active nav highlight ---------- */
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            color: #f1f5f9;
+        }
+        .nav-link.active .nav-icon {
+            color: #c5a059;
+        }
+        .nav-link.active .nav-dot {
+            opacity: 1;
+        }
+
+        /* ---------- gold divider ---------- */
+        .divider-gold {
+            height: 1px;
+            background: linear-gradient(90deg, #c5a059 0%, #c5a059 60px, rgba(197, 160, 89, 0.15) 60px, transparent 100%);
+            border: none;
+            margin: 0;
+        }
+
+        /* ---------- card hover ---------- */
+        .card-hover {
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .card-hover:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transform: translateY(-1px);
+        }
+
+        /* ---------- mobile sidebar overlay ---------- */
+        .sidebar-overlay {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .sidebar-overlay.hidden-overlay {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .sidebar-overlay.visible-overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 1023px) {
+            .sidebar-panel {
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .sidebar-panel.open {
+                transform: translateX(0);
+            }
+        }
+
+        /* ---------- subtle divider between info lines ---------- */
+        .info-row:not(:last-child) {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-cream text-slate-800 antialiased">
+
+    <!-- ==================== MOBILE OVERLAY ==================== -->
+    <div id="sidebarOverlay" class="sidebar-overlay hidden-overlay fixed inset-0 bg-black/40 z-40 lg:hidden" onclick="closeSidebar()"></div>
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside id="sidebar" class="sidebar-panel fixed top-0 left-0 z-50 w-64 lg:w-72 h-full bg-sidebar text-white flex flex-col overflow-y-auto lg:translate-x-0">
+
+        <!-- Top: Name -->
+        <div class="px-6 pt-10 pb-6 flex items-center justify-between">
+            <h1 class="font-serif text-xl tracking-[0.15em] font-semibold text-white leading-tight">
+                QIAOQIAO<br>JIANG
+            </h1>
+            <button class="text-white/50 hover:text-white/80 transition-colors" title="Settings">
+                <i data-lucide="settings" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Nav -->
+        <nav class="flex-1 px-4 space-y-1">
+            <a href="#home" class="nav-link active flex items-center gap-3 px-4 py-3 text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors group" data-section="home">
+                <span class="nav-dot w-1.5 h-1.5 rounded-full bg-gold opacity-0 transition-opacity"></span>
+                <i data-lucide="home" class="nav-icon w-4 h-4 text-white/50 group-hover:text-white/80 transition-colors"></i>
+                <span>Home</span>
+            </a>
+            <a href="#research" class="nav-link flex items-center gap-3 px-4 py-3 text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors group" data-section="research">
+                <span class="nav-dot w-1.5 h-1.5 rounded-full bg-gold opacity-0 transition-opacity"></span>
+                <i data-lucide="flask-conical" class="nav-icon w-4 h-4 text-white/50 group-hover:text-white/80 transition-colors"></i>
+                <span>Research</span>
+            </a>
+            <a href="#honors" class="nav-link flex items-center gap-3 px-4 py-3 text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors group" data-section="honors">
+                <span class="nav-dot w-1.5 h-1.5 rounded-full bg-gold opacity-0 transition-opacity"></span>
+                <i data-lucide="award" class="nav-icon w-4 h-4 text-white/50 group-hover:text-white/80 transition-colors"></i>
+                <span>Honors</span>
+            </a>
+            <a href="#internship" class="nav-link flex items-center gap-3 px-4 py-3 text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors group" data-section="internship">
+                <span class="nav-dot w-1.5 h-1.5 rounded-full bg-gold opacity-0 transition-opacity"></span>
+                <i data-lucide="briefcase" class="nav-icon w-4 h-4 text-white/50 group-hover:text-white/80 transition-colors"></i>
+                <span>Internship</span>
+            </a>
+            <a href="#projects" class="nav-link flex items-center gap-3 px-4 py-3 text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors group" data-section="projects">
+                <span class="nav-dot w-1.5 h-1.5 rounded-full bg-gold opacity-0 transition-opacity"></span>
+                <i data-lucide="folder-git-2" class="nav-icon w-4 h-4 text-white/50 group-hover:text-white/80 transition-colors"></i>
+                <span>Projects</span>
+            </a>
+            <a href="#outcomes" class="nav-link flex items-center gap-3 px-4 py-3 text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors group" data-section="outcomes">
+                <span class="nav-dot w-1.5 h-1.5 rounded-full bg-gold opacity-0 transition-opacity"></span>
+                <i data-lucide="trophy" class="nav-icon w-4 h-4 text-white/50 group-hover:text-white/80 transition-colors"></i>
+                <span>Outcomes</span>
+            </a>
+            <a href="#cv" class="nav-link flex items-center gap-3 px-4 py-3 text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors group" data-section="cv">
+                <span class="nav-dot w-1.5 h-1.5 rounded-full bg-gold opacity-0 transition-opacity"></span>
+                <i data-lucide="file-text" class="nav-icon w-4 h-4 text-white/50 group-hover:text-white/80 transition-colors"></i>
+                <span>CV</span>
+            </a>
+        </nav>
+
+        <!-- Bottom: Social Icons -->
+        <div class="px-6 pb-10 pt-6 flex items-center gap-4">
+            <a href="#" class="text-white/40 hover:text-gold transition-colors" title="Google Scholar">
+                <i data-lucide="book-copy" class="w-5 h-5"></i>
+            </a>
+            <a href="#" class="text-white/40 hover:text-gold transition-colors" title="ORCID">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.025-5.325 5.025h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 4.022-2.484 4.022-3.722 0-2.016-1.284-3.722-3.825-3.722h-2.494z"/></svg>
+            </a>
+            <a href="#" class="text-white/40 hover:text-gold transition-colors" title="GitHub">
+                <i data-lucide="github" class="w-5 h-5"></i>
+            </a>
+            <a href="#" class="text-white/40 hover:text-gold transition-colors" title="Institution">
+                <i data-lucide="building-2" class="w-5 h-5"></i>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="lg:ml-72 min-h-screen">
+
+        <!-- Mobile header bar -->
+        <div class="lg:hidden sticky top-0 z-30 bg-cream/90 backdrop-blur-md border-b border-black/5 px-5 py-4 flex items-center gap-3">
+            <button onclick="toggleSidebar()" class="text-slate-700 hover:text-gold transition-colors">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+            <span class="font-serif text-lg font-semibold tracking-wide text-slate-800">QIAOQIAO JIANG</span>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-5 py-8 lg:py-12 space-y-10">
+
+            <!-- ============ HOME / PROFILE ============ -->
+            <section id="home" class="scroll-mt-24">
+
+                <!-- Profile Card -->
+                <div class="bg-white rounded-2xl shadow-sm card-hover p-6 sm:p-8 lg:p-10 flex flex-col md:flex-row gap-8 md:gap-12">
+                    <!-- Left: Info -->
+                    <div class="flex-1 space-y-5">
+                        <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-slate-900 leading-tight">
+                            Qiaoqiao Jiang
+                            <span class="text-xl sm:text-2xl font-sans font-normal text-slate-400 ml-1">(江侨侨)</span>
+                        </h2>
+
+                        <div class="space-y-1 text-sm sm:text-base text-slate-600">
+                            <div class="info-row flex items-start gap-3 py-0.5">
+                                <i data-lucide="graduation-cap" class="w-4 h-4 text-gold mt-0.5 flex-shrink-0"></i>
+                                <span>B.Eng. in Civil Engineering · Hunan University · 2019–2023</span>
+                            </div>
+                            <div class="info-row flex items-start gap-3 py-0.5">
+                                <i data-lucide="graduation-cap" class="w-4 h-4 text-gold mt-0.5 flex-shrink-0"></i>
+                                <span>M.Eng. in Civil Engineering · Shenzhen University · 2023–2026</span>
+                            </div>
+                            <div class="info-row flex items-start gap-3 py-0.5">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-gold mt-0.5 flex-shrink-0"></i>
+                                <span>Jingmen, Hubei, China</span>
+                            </div>
+                            <div class="flex items-start gap-3 py-0.5">
+                                <i data-lucide="mail" class="w-4 h-4 text-gold mt-0.5 flex-shrink-0"></i>
+                                <a href="mailto:15071969622@163.com" class="text-slate-600 hover:text-gold transition-colors">15071969622@163.com</a>
+                            </div>
+                        </div>
+
+                        <p class="text-sm text-slate-400 italic pt-2">
+                            AI tools enthusiast — let's explore together! 🤖✨
+                        </p>
+                    </div>
+
+                    <!-- Right: Photo -->
+                    <div class="flex-shrink-0 flex justify-center md:justify-end">
+                        <div class="relative">
+                            <div class="w-40 h-48 sm:w-44 sm:h-52 rounded-xl overflow-hidden shadow-md border-2 border-white ring-1 ring-black/5">
+                                <img src="photo.jpg" alt="Qiaoqiao Jiang" class="w-full h-full object-cover">
+                            </div>
+                            <!-- Decorative accent dot -->
+                            <div class="absolute -bottom-2 -right-2 w-5 h-5 rounded-full bg-gold shadow-sm"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ RESEARCH ============ -->
+            <section id="research" class="scroll-mt-24">
+                <!-- Section header with icon + gold divider -->
+                <div class="mb-5">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="flask-conical" class="w-5 h-5 text-gold"></i>
+                        <h3 class="font-serif text-2xl font-semibold text-slate-900">Research Summary</h3>
+                    </div>
+                    <hr class="divider-gold">
+                </div>
+
+                <!-- Content card -->
+                <div class="bg-white rounded-2xl shadow-sm card-hover p-6 sm:p-8">
+                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                        My research focuses on <span class="font-medium text-slate-800">systems engineering optimization and data modeling</span>. In research projects, I am responsible for multi-dimensional experimental data collection, cleaning, and visual analysis — specializing in transforming complex engineering metrics into structured data models.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base mt-4">
+                        With <span class="font-medium text-slate-800">rigorous logical reasoning</span> and analytical thinking, I excel at rapidly translating data insights into actionable business strategies.
+                    </p>
+                </div>
+            </section>
+
+            <!-- ============ HONORS & AWARDS ============ -->
+            <section id="honors" class="scroll-mt-24">
+                <div class="mb-5">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="award" class="w-5 h-5 text-gold"></i>
+                        <h3 class="font-serif text-2xl font-semibold text-slate-900">Honors &amp; Awards</h3>
+                    </div>
+                    <hr class="divider-gold">
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm card-hover p-6 sm:p-8">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                Hunan University First-Class Scholarship (2x)
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                Shenzhen University First-Class Scholarship
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                "Merit Student" Title (2x)
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                Outstanding Student Leader
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ INTERNSHIP ============ -->
+            <section id="internship" class="scroll-mt-24">
+                <div class="mb-5">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="briefcase" class="w-5 h-5 text-gold"></i>
+                        <h3 class="font-serif text-2xl font-semibold text-slate-900">Internship</h3>
+                    </div>
+                    <hr class="divider-gold">
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm card-hover p-6 sm:p-8">
+                    <div class="space-y-5">
+                        <div class="pb-4 border-b border-slate-100">
+                            <h4 class="font-serif text-lg font-semibold text-slate-800">职位名称</h4>
+                            <p class="text-sm text-slate-500 mt-1">公司名称 · 时间</p>
+                            <p class="text-sm text-slate-600 mt-2">实习描述：在这里写你的实习内容、负责的工作、取得的成果等。</p>
+                        </div>
+                        <div class="pb-4 border-b border-slate-100">
+                            <h4 class="font-serif text-lg font-semibold text-slate-800">职位名称</h4>
+                            <p class="text-sm text-slate-500 mt-1">公司名称 · 时间</p>
+                            <p class="text-sm text-slate-600 mt-2">实习描述：在这里写你的实习内容、负责的工作、取得的成果等。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-serif text-lg font-semibold text-slate-800">职位名称</h4>
+                            <p class="text-sm text-slate-500 mt-1">公司名称 · 时间</p>
+                            <p class="text-sm text-slate-600 mt-2">实习描述：在这里写你的实习内容、负责的工作、取得的成果等。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ PROJECTS ============ -->
+            <section id="projects" class="scroll-mt-24">
+                <div class="mb-5">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="folder-git-2" class="w-5 h-5 text-gold"></i>
+                        <h3 class="font-serif text-2xl font-semibold text-slate-900">Projects</h3>
+                    </div>
+                    <hr class="divider-gold">
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm card-hover p-6 sm:p-8">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                项目名称一
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                项目名称二
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                项目名称三
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                项目名称四
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                项目名称五
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                项目名称六
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                项目名称七
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0"></span>
+                                项目名称八
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============ OUTCOMES ============ -->
+            <section id="outcomes" class="scroll-mt-24">
+                <div class="mb-5">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="trophy" class="w-5 h-5 text-gold"></i>
+                        <h3 class="font-serif text-2xl font-semibold text-slate-900">Outcomes</h3>
+                    </div>
+                    <hr class="divider-gold">
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm card-hover p-6 sm:p-8">
+                    <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                        在这里列出你的项目成果，如论文发表、专利申请、竞赛获奖、证书资质等。
+                    </p>
+                </div>
+            </section>
+
+            <!-- ============ CV ============ -->
+            <section id="cv" class="scroll-mt-24">
+                <div class="mb-5">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="file-text" class="w-5 h-5 text-gold"></i>
+                        <h3 class="font-serif text-2xl font-semibold text-slate-900">Curriculum Vitae</h3>
+                    </div>
+                    <hr class="divider-gold">
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm card-hover p-6 sm:p-8">
+                    <div class="space-y-6">
+                        <!-- Education -->
+                        <div>
+                            <h4 class="font-serif text-lg font-semibold text-slate-800 mb-3">Education</h4>
+                            <div class="space-y-3">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm">
+                                    <span class="font-medium text-slate-700">M.Eng. in Civil Engineering</span>
+                                    <span class="text-slate-400 text-xs sm:text-sm">2023 – Present</span>
+                                </div>
+                                <p class="text-sm text-slate-500 -mt-1">Shenzhen University · 深圳大学</p>
+
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm mt-2">
+                                    <span class="font-medium text-slate-700">B.Eng. in Civil Engineering</span>
+                                    <span class="text-slate-400 text-xs sm:text-sm">2019 – 2023</span>
+                                </div>
+                                <p class="text-sm text-slate-500 -mt-1">Hunan University · 湖南大学</p>
+                            </div>
+                        </div>
+
+                        <!-- Experience -->
+                        <div class="pt-4 border-t border-slate-100">
+                            <h4 class="font-serif text-lg font-semibold text-slate-800 mb-3">Experience</h4>
+                            <div class="space-y-3">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm">
+                                    <span class="font-medium text-slate-700">当前职位</span>
+                                    <span class="text-slate-400 text-xs sm:text-sm">20XX – Present</span>
+                                </div>
+                                <p class="text-sm text-slate-500 -mt-1">机构名称 · 部门</p>
+
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm mt-2">
+                                    <span class="font-medium text-slate-700">过往职位</span>
+                                    <span class="text-slate-400 text-xs sm:text-sm">20XX – 20XX</span>
+                                </div>
+                                <p class="text-sm text-slate-500 -mt-1">机构名称 · 部门</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 text-sm text-slate-500 flex flex-wrap gap-x-6 gap-y-1">
+                    <span>Download full CV:</span>
+                    <a href="#" class="text-gold hover:text-goldLight underline underline-offset-2 transition-colors inline-flex items-center gap-1">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> PDF
+                    </a>
+                </div>
+            </section>
+
+            <!-- Footer spacer -->
+            <div class="h-12"></div>
+
+        </div>
+    </main>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // ---------- Sidebar toggle (mobile) ----------
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            const open = sidebar.classList.toggle('open');
+            if (open) {
+                overlay.classList.remove('hidden-overlay');
+                overlay.classList.add('visible-overlay');
+            } else {
+                overlay.classList.remove('visible-overlay');
+                overlay.classList.add('hidden-overlay');
+            }
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('visible-overlay');
+            overlay.classList.add('hidden-overlay');
+        }
+
+        // ---------- Active nav detection via IntersectionObserver ----------
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('data-section') === id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, {
+            rootMargin: '-20% 0px -60% 0px',
+            threshold: 0,
+        });
+
+        sections.forEach(section => observer.observe(section));
+
+        // Close sidebar on nav click (mobile)
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    closeSidebar();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
